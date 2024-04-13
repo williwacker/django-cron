@@ -1,5 +1,12 @@
 Changelog
 =========
+0.6.1
+------
+
+    - Update requirements to Django 5.X
+
+    - Update send-mail import
+
 0.6.0
 ------
 
