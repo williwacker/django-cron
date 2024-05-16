@@ -121,7 +121,7 @@ class CronJobManager(object):
             last_job = (
                 CronJobLog.objects.filter(code=cron_job.code)
                     .order_by('-start_time')
-                    .exclude(start_time__gt=datetime.today())
+                    .exclude(start_time__gt=utc_now())
                     .first()
             )
             if (
@@ -137,7 +137,7 @@ class CronJobManager(object):
             try:
                 self.previously_ran_successful_cron = CronJobLog.objects.filter(
                     code=cron_job.code, is_success=True
-                ).exclude(start_time__gt=datetime.today()).latest('start_time')
+                ).exclude(start_time__gt=utc_now()).latest('start_time')
             except CronJobLog.DoesNotExist:
                 pass
 
@@ -200,9 +200,7 @@ class CronJobManager(object):
 
     def __enter__(self):
         from django_cron.models import CronJobLog
-
         self.cron_log = CronJobLog(start_time=get_current_time())
-
         return self
 
     def __exit__(self, ex_type, ex_value, ex_traceback):
